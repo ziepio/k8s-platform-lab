@@ -1,0 +1,9 @@
+kubeconfig
+*.kubeconfig
+.env
+*.tfstate
+*.tfstate.*
+**/.terraform/*
+*.zip
+.DS_Store
+docs/
