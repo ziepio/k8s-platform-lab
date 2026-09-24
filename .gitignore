@@ -7,3 +7,6 @@ kubeconfig
 *.zip
 .DS_Store
 docs/
+.venv/
+__pycache__/
+.pytest_cache/
