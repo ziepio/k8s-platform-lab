@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pacer-config
+  namespace: pacer
+data:
+  APP_VERSION: "0.1.0"
+  APP_GREETING: "Work out your running pace."

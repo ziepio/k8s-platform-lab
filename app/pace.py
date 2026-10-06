@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 
 class PaceError(ValueError):
+    """Raised when the input does not describe a real run."""
 
 
 @dataclass(frozen=True)
