@@ -1,0 +1,7 @@
+pacer {{ .Chart.AppVersion }} is installed as release {{ .Release.Name }}.
+
+Reach it with:
+
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "pacer.fullname" . }} 8080:{{ .Values.service.port }}
+
+Then open http://localhost:8080

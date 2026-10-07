@@ -1,0 +1,48 @@
+replicaCount: 2
+
+image:
+  repository: pacer
+  tag: dev
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+config:
+  APP_VERSION: "0.1.0"
+  APP_GREETING: "Work out your running pace."
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  fsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+probes:
+  liveness:
+    initialDelaySeconds: 5
+    periodSeconds: 15
+    failureThreshold: 3
+  readiness:
+    initialDelaySeconds: 2
+    periodSeconds: 5
+    failureThreshold: 2
+  startup:
+    periodSeconds: 3
+    failureThreshold: 20

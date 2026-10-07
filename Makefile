@@ -2,7 +2,7 @@ CLUSTER := platform-lab
 IMAGE   := pacer
 TAG     := dev
 
-.PHONY: up down status reset build load test dev deploy undeploy app logs
+.PHONY: up down status reset build load test dev deploy undeploy app logs chart-lint chart-render chart-install chart-uninstall
 
 up:
 	kind create cluster --config cluster/kind-config.yaml
@@ -41,4 +41,19 @@ app:
 
 logs:
 	kubectl -n pacer logs -l app.kubernetes.io/name=pacer -f --tail=50
+
+
+# Helm
+chart-lint:
+	helm lint charts/pacer
+
+chart-render:
+	helm template pacer charts/pacer
+
+chart-install:
+	helm upgrade --install pacer charts/pacer \
+		--namespace pacer --create-namespace --wait
+
+chart-uninstall:
+	helm uninstall pacer --namespace pacer
 

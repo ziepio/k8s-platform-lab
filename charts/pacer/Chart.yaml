@@ -1,0 +1,7 @@
+apiVersion: v2
+name: pacer
+description: Running pace calculator
+type: application
+
+version: 0.1.0
+appVersion: "0.1.0"
