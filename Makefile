@@ -2,7 +2,7 @@ CLUSTER := platform-lab
 IMAGE   := pacer
 TAG     := dev
 
-.PHONY: up down status reset build load test dev deploy undeploy app logs chart-lint chart-render chart-install chart-uninstall
+.PHONY: up down status reset build load test dev deploy undeploy app logs chart-lint chart-render chart-install chart-uninstall argocd argocd-app argocd-pass argocd-ui
 
 up:
 	kind create cluster --config cluster/kind-config.yaml
