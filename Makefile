@@ -57,3 +57,19 @@ chart-install:
 chart-uninstall:
 	helm uninstall pacer --namespace pacer
 
+
+# ArgoCD
+argocd:
+	kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+	kubectl -n argocd rollout status deployment/argocd-server --timeout=300s
+
+argocd-app:
+	kubectl apply -f platform/argocd/application-pacer.yaml
+
+argocd-pass:
+	@kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+
+argocd-ui:
+	kubectl -n argocd port-forward svc/argocd-server 8443:443
+

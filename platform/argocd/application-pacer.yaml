@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pacer
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/ziepio/k8s-platform-lab.git
+    targetRevision: main
+    path: charts/pacer
+
+    helm:
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pacer
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
+
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
