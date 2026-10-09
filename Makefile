@@ -43,7 +43,7 @@ logs:
 	kubectl -n pacer logs -l app.kubernetes.io/name=pacer -f --tail=50
 
 ingress:
-	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/kind/deploy.yaml
 	kubectl -n ingress-nginx wait --for=condition=ready pod \
 		--selector=app.kubernetes.io/component=controller --timeout=180s
 
