@@ -9,6 +9,13 @@ service:
   type: ClusterIP
   port: 80
 
+ingress:
+  enabled: true
+  className: nginx
+  host: pacer.localtest.me
+  clusterIssuer: lab-ca
+  annotations: {}
+
 config:
   APP_VERSION: "0.1.0"
   APP_GREETING: "Work out your running pace."

@@ -2,7 +2,7 @@ CLUSTER := platform-lab
 IMAGE   := pacer
 TAG     := dev
 
-.PHONY: up down status reset build load test dev deploy undeploy app logs chart-lint chart-render chart-install chart-uninstall argocd argocd-app argocd-pass argocd-ui
+.PHONY: up down status reset build load test dev deploy undeploy app logs ingress certmanager chart-lint chart-render chart-install chart-uninstall argocd argocd-app argocd-pass argocd-ui
 
 up:
 	kind create cluster --config cluster/kind-config.yaml
@@ -41,6 +41,16 @@ app:
 
 logs:
 	kubectl -n pacer logs -l app.kubernetes.io/name=pacer -f --tail=50
+
+ingress:
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+	kubectl -n ingress-nginx wait --for=condition=ready pod \
+		--selector=app.kubernetes.io/component=controller --timeout=180s
+
+certmanager:
+	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
+	kubectl -n cert-manager rollout status deployment/cert-manager-webhook --timeout=180s
+	kubectl apply -f platform/cert-manager/cluster-issuers.yaml
 
 
 # Helm
