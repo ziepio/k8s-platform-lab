@@ -1,0 +1,49 @@
+{{- if .Values.monitoring.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "pacer.fullname" . }}
+  labels:
+    {{- include "pacer.labels" . | nindent 4 }}
+spec:
+  groups:
+    - name: pacer
+      rules:
+        - alert: PacerDown
+          expr: up{job=~".*pacer.*"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "pacer is not responding to scrapes"
+
+        - alert: PacerHighErrorRate
+          expr: |
+            sum(rate(pacer_http_requests_total{status=~"5.."}[5m]))
+            /
+            sum(rate(pacer_http_requests_total[5m])) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "More than 5% of requests are failing"
+
+        - alert: PacerSlowResponses
+          expr: |
+            histogram_quantile(0.95,
+              sum(rate(pacer_http_request_duration_seconds_bucket[5m])) by (le)
+            ) > 0.5
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "95th percentile latency above 500ms"
+
+        - alert: PacerNoTraffic
+          expr: sum(rate(pacer_http_requests_total[30m])) == 0
+          for: 30m
+          labels:
+            severity: info
+          annotations:
+            summary: "No requests in the last 30 minutes"
+{{- end }}

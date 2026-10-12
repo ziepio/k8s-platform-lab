@@ -2,7 +2,7 @@ CLUSTER := platform-lab
 IMAGE   := pacer
 TAG     := dev
 
-.PHONY: up down status reset build load test dev deploy undeploy app logs ingress certmanager chart-lint chart-render chart-install chart-uninstall argocd argocd-app argocd-pass argocd-ui
+.PHONY: up down status reset build load test dev deploy undeploy app logs ingress certmanager monitoring grafana chart-lint chart-render chart-install chart-uninstall argocd argocd-app argocd-pass argocd-ui
 
 up:
 	kind create cluster --config cluster/kind-config.yaml
@@ -51,6 +51,17 @@ certmanager:
 	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
 	kubectl -n cert-manager rollout status deployment/cert-manager-webhook --timeout=180s
 	kubectl apply -f platform/cert-manager/cluster-issuers.yaml
+
+monitoring:
+	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+	helm repo update
+	helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+		-n monitoring --create-namespace \
+		-f platform/monitoring/values.yaml --wait --timeout 10m
+	kubectl apply -f platform/monitoring/dashboard-pacer.yaml
+
+grafana:
+	kubectl -n monitoring port-forward svc/monitoring-grafana 3000:80
 
 
 # Helm

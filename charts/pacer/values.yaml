@@ -20,6 +20,10 @@ config:
   APP_VERSION: "0.1.0"
   APP_GREETING: "Work out your running pace."
 
+monitoring:
+  enabled: true
+  interval: 15s
+
 resources:
   requests:
     cpu: 50m
