@@ -51,15 +51,6 @@ jobs:
         id: meta
         run: echo "tag=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Inspect the role ARN secret
-        env:
-          ARN: ${{ secrets.AWS_ROLE_ARN }}
-        run: |
-          echo "length: (printf'%s'"ARN" | wc -c)"
-          echo "has arn prefix: (printf'%s'"ARN" | grep -c '^arn:aws:iam::')"
-          echo "has role/: (printf'%s'"ARN" | grep -c ':role/')"
-          echo "has oidc-provider: (printf'%s'"ARN" | grep -c 'oidc-provider')"
-
       - name: Log in to AWS using OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:

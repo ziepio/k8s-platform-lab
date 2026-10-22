@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "github_repository" {
   description = "Repository in the format `owner/name`. Only this repository will be granted the role."
   type        = string
-  default     = "ziepio/k8s-platform-lab"
+  default     = "ziepio@53996597/k8s-platform-lab@1365532861"
 }
 
 variable "repository_name" {
