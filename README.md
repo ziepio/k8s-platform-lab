@@ -3,40 +3,8 @@
 The workload is **pacer**: a small API that works out your running pace.
 It is deliberately boring. The interesting part is everything around it.
 
-```
-                 git push
-                     │
-                     ▼
-        ┌────────────────────────┐
-        │     GitHub Actions     │
-        │  tests → image → tag   │
-        └───────────┬────────────┘
-                    │ OIDC, no stored keys
-                    ▼
-            ┌───────────────┐
-            │  ECR Public   │
-            └───────┬───────┘
-                    │                    commit with new tag
-                    │                    ┌──────────────────┐
-                    │                    ▼                  │
-┌───────────────────┼───────────────────────────────────────┼──────────┐
-│  kind cluster     │                                       │          │
-│                   │          ┌─────────┐   watches repo   │          │
-│                   │          │ ArgoCD  │──────────────────┘          │
-│                   │          └────┬────┘                             │
-│                   │               │ applies                          │
-│                   ▼               ▼                                  │
-│            ┌─────────────────────────────┐                           │
-│  :443 ───► │ ingress-nginx → pacer (×3)  │ ◄── cert-manager          │
-│            └──────────────┬──────────────┘                           │
-│                           │ /metrics                                 │
-│                           ▼                                          │
-│              ┌─────────────────────────┐                             │
-│              │ Prometheus → Grafana    │                             │
-│              │      Alertmanager       │                             │
-│              └─────────────────────────┘                             │
-└──────────────────────────────────────────────────────────────────────┘
-```
+![Architecture](docs/diagrams/architecture.png)
+<sub>Source: [architecture.drawio](docs/diagrams/architecture.drawio) — open at app.diagrams.net</sub>
 
 ## What is in here
 
