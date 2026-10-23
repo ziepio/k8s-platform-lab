@@ -2,7 +2,7 @@ replicaCount: 3
 
 image:
   repository: public.ecr.aws/d9i5r9n3/pacer
-  tag: 9fc7c59
+  tag: ea6d98c
   pullPolicy: IfNotPresent
 
 service:
