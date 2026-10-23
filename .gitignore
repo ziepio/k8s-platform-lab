@@ -6,7 +6,7 @@ kubeconfig
 **/.terraform/*
 *.zip
 .DS_Store
-docs/
+only_for_me/
 .venv/
 __pycache__/
 .pytest_cache/
